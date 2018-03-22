@@ -3,3 +3,15 @@ routing:
         pattern: /
         controller: DefaultController
         action: indexAction
+    login:
+        pattern: /login
+        controller: SecurityController
+        action: loginAction
+    logout:
+        pattern: /logout
+        controller: SecurityController
+        action: logoutAction
+    registration:
+        pattern: /registration
+        controller: SecurityController
+        action: registerAction

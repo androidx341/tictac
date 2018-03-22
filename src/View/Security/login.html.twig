@@ -1,0 +1,36 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="form-container">
+        <form id="login-in-form" action="" method="post">
+            <div class="form-group">
+                <label for="recipient-name" class="form-control-label">У вас нет логина? <a id="registration-link" href="#">Зарегистрируйтесь</a></label>
+                <input type="text" class="form-control" id="login-name" name="userName" placeholder="Логин">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="login-password" name="userPassword" placeholder="Пароль">
+            </div>
+            <div class="form-group">
+                <label class="form-control-label"> <a href="#">Забыли пароль?</a></label>
+                <label for="recipient-name" class="form-control-label"></label>
+                <input type="submit" class="form-control btn btn-primary" id="login-submit"  name="submit">
+            </div>
+        </form>
+        <form id="register-form" action="/" style="display:none">
+            <div class="form-group">
+                <input type="email" class="form-control" id="register-name" name="userName" placeholder="Логин" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="register-password" name="userPassword" placeholder="Пароль">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="register-check-password" name="userCheckPassword" placeholder="Повторите пароль">
+            </div>
+            <div class="form-group">
+                <label class="form-control-label"> <a id="login-link" href="#">Авторизация</a></label>
+                <label for="recipient-name" class="form-control-label"></label>
+                <input type="submit" class="form-control btn btn-primary" id="register-submit" name="submit">
+            </div>
+        </form>
+    </div>
+{% endblock %}

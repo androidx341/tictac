@@ -1,0 +1,32 @@
+body {background: url("../img/bckg.jpg") repeat;
+        background-size: 425px;}
+.main{
+    width: 850px;
+    height: 850px;
+    margin: auto;
+    background: #eaebf0;
+}
+.header{
+    margin: auto;
+    width: 850px;
+    height: 61px;
+    background: url("../img/notepad.png");
+    background-size: 900px;
+}
+.form-container{
+       padding: 250px 0 250px 0;
+}
+#login-in-form{
+    width: 400px;
+    margin: auto;
+}
+#register-form{
+    width: 400px;
+    margin: auto;
+}
+#canvas{
+    /*border: solid 2px gray;*/
+    width: 700px;
+    margin: 75px;
+}
+
