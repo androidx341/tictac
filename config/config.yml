@@ -1,0 +1,5 @@
+routing:
+    homepage:
+        pattern: /
+        controller: DefaultController
+        action: indexAction
