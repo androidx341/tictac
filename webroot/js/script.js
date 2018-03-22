@@ -19,12 +19,11 @@ $(document).ready(function() {
         switch(this.id) {
             case "login-in-form":
                 event.preventDefault();
-                $.post('/signin', {
-                    userEmail: $('#login-email').val(),
-                    userPassword: (MD5($('#login-password').val()))
+                $.post('/login', {
+                    userName: $('#login-name').val(),
+                    userPassword: $('#login-password').val()
                 },'json')
                     .done(function (r) {
-                        $('#loginModal').modal('hide');
                         window.location.replace("/");
                         console.log('Success',r);
                     })
@@ -36,12 +35,11 @@ $(document).ready(function() {
             case "register-form":
                 event.preventDefault();
                 $.post('/registration', {
-                    userEmail: $('#register-email').val(),
-                    userPassword: (MD5($('#register-password').val())),
-                    userCheckPassword: (MD5($('#register-check-password').val()))
+                    userName: $('#register-name').val(),
+                    userPassword: $('#register-password').val(),
+                    userCheckPassword: $('#register-check-password').val()
                 },'json')
                     .done(function (r) {
-                        $('#loginModal').modal('hide');
                         console.log('Success',r);
                     })
                     .fail(function (r) {
@@ -63,7 +61,8 @@ $(document).ready(function() {
             })
     });
     //Autoriztion block end
-    $("#canvas").click(function(e){
+    var $canvas = $("#canvas");
+    $canvas.click(function(e){
         var rect = canvas.getBoundingClientRect();
         var x = event.clientX - rect.left;
         var y = event.clientY - rect.top;
@@ -80,14 +79,16 @@ $(document).ready(function() {
             })
         drawCell(cell[0],cell[1],1);
     });
-
-    var pointSize = 3;
-    var fildSize = 5;
-    var c = document.getElementById("canvas");
-    var width = c.width;
-    var height = c.height;
-    var cellWidth =  width/fildSize;
-    var cellHeight =  height/fildSize;
+    if ($canvas.length){
+        var pointSize = 3;
+        var fildSize = 5;
+        var c = document.getElementById("canvas");
+        var width = c.width;
+        var height = c.height;
+        var cellWidth =  width/fildSize;
+        var cellHeight =  height/fildSize;
+        drawField(fildSize);
+    }
 
     function drawField(size){
         var c = document.getElementById("canvas");
@@ -118,7 +119,6 @@ $(document).ready(function() {
         x1 = (col + 1) * cellWidth - 5;
         y0 = row * cellHeight + 5;
         y1 = (row + 1)* cellHeight - 5;
-        console.log(x0,x1,y0,y1);
         if (stroke == 0){
             drawCircle(x0,x1,y0,y1);
         }else {
@@ -149,5 +149,5 @@ $(document).ready(function() {
         ctx.arc((x1+x0)/2, (y1+y0)/2, (x1-x0)/2, 0, Math.PI * 2, true);
         ctx.stroke();
     }
-    drawField(fildSize);
+
 });

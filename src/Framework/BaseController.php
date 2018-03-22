@@ -26,4 +26,25 @@ abstract class BaseController
         }
         return $twig->render($template,$params);
     }
+
+    public function getRouter() : Router
+    {
+        return $this->container->get('router');
+    }
+    /**
+     * @return Response
+     * @throws \Exception
+     */
+    public function sendResponse() : Response
+    {
+        return $this->container->get('response');
+    }
+
+    public function getRepository($r_name)
+    {
+        return $this
+            ->container
+            ->get('repository_factory')
+            ->createRepository($r_name);
+    }
 }

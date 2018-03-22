@@ -9,13 +9,26 @@ try {
     require VENDOR_DIR . 'autoload.php';
 
     $config = Symfony\Component\Yaml\Yaml::parseFile(CONF_DIR . 'config.yml');
+    $parameters = $config['parameters'];
     $routing = $config['routing'];
 
+    $dsn = "mysql: host={$parameters['database_host']}; dbname={$parameters['database_name']}";
+    $dbConnection = new \PDO($dsn, $parameters['database_user'], $parameters['database_password']);
+    $dbConnection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    $dbConnection->exec("set names utf8");
+    \Framework\Session::start();
     $loader = new Twig_Loader_Filesystem(VIEW_DIR);
     $twig = new Twig_Environment($loader);
     $request = new \Framework\Request($_GET, $_POST, $_SERVER);
     $router = new \Framework\Router($routing);
+    $response = new \Framework\Response();
+    $repositoryFactory = new \Framework\RepositoryFactory();
+    $repositoryFactory->setPDO($dbConnection);
     $container = (new \Framework\Container())
+        ->set('repository_factory', $repositoryFactory)
+        ->set('router',$router)
+        ->set('pdo', $dbConnection)
+        ->set('response',$response)
         ->set('twig',$twig);
 }
 catch (\Exception $e)

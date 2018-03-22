@@ -68,6 +68,7 @@ class Router
                     $request->mergeGetWithArray($result);
                 }
                 $this->currentRoute = $route;
+                $this->isAuth($route);
                 return;
             }
         }
@@ -87,5 +88,11 @@ class Router
             return null;
         }
         return $this->currentRoute[$key];
+    }
+
+    private function isAuth($route){
+        if (!Session::has('user') && $this->currentRoute['pattern'] == '/'){
+            $this->redirect('auth');
+        }
     }
 }

@@ -1,8 +1,18 @@
+parameters:
+    database_user: 'root'
+    database_name: 'tictactoe'
+    database_host: 'localhost'
+    database_password: ~
+
 routing:
     homepage:
         pattern: /
         controller: DefaultController
         action: indexAction
+    auth:
+        pattern: /auth
+        controller: SecurityController
+        action: authAction
     login:
         pattern: /login
         controller: SecurityController
@@ -15,3 +25,7 @@ routing:
         pattern: /registration
         controller: SecurityController
         action: registerAction
+    click:
+        pattern: /api/click
+        controller: ApiController
+        action: clickAction
