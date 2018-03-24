@@ -1,7 +1,25 @@
 {% extends 'layout.html.twig'%}
 {% block title %} Defaul Index {% endblock %}
 {% block content  %}
-        <canvas id="canvas" width="700" height="700"></canvas>
+        <div class="head-info">
+            <div class="info-block-player">
+                <div class="user-name">
+                    <p id="player" data-id="{{ sessionGet('userId') }}">{{ sessionGet('user') }}</p>
+                </div>
+            </div>
+            <div class="info-block-score">
+                <div class="score">
+                    Побед: <span id="score_player">{{ sessionGet('userStat') }}</span>
+                </div>
+            </div>
+            <div class="info-block-player">
+                <div class="user-name" id="opName">
+
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-primary text-center" id="alert" style="font-size: 20px"></div>
+        <canvas id="canvas" width="300" height="300"></canvas>
 {% endblock %}
 
 

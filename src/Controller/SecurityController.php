@@ -60,7 +60,12 @@ class SecurityController extends \Framework\BaseController {
                     ->setPassword(password_hash($form->password,PASSWORD_DEFAULT));
                 $res = $this->getRepository('User')->addUser($new_user);
 
-                if ($res)  return $this->sendResponse()->jsonCodeMessageResponse(200,'Registration complete');
+                if ($res){
+                    $user = $this->getRepository('User')->findByName($form->username);
+                    Session::set('user',$user->getUsername());
+                    Session::set('userId',$user->getId());
+                    return $this->sendResponse()->jsonCodeMessageResponse(200,'Registration complete');
+                }
             }
         }
         return $this->sendResponse()->jsonCodeMessageResponse(404,'Form does not sended');

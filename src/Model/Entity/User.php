@@ -14,6 +14,8 @@ class User
     private $id;
     private $username;
     private $password;
+    private $time;
+    private $game;
 
     /**
      * @return mixed
@@ -65,4 +67,40 @@ class User
         $this->password = $password;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTime()
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param mixed $time
+     */
+    public function setTime($time)
+    {
+        $this->time = $time;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGame()
+    {
+        return $this->game;
+    }
+
+    /**
+     * @param mixed $game
+     */
+    public function setGame($game)
+    {
+        $this->game = $game;
+        return $this;
+    }
+
+
 }

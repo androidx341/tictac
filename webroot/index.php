@@ -30,6 +30,7 @@ try {
         ->set('pdo', $dbConnection)
         ->set('response',$response)
         ->set('twig',$twig);
+    $twig->addExtension(new \Framework\Twig\AppExtension($router));
 }
 catch (\Exception $e)
 {
@@ -50,6 +51,7 @@ try {
     $content = $controller->$action($request);
 }
  catch (\Exception $e) {
+       dump($e);
        echo $e->getMessage();
 }
 echo $content;

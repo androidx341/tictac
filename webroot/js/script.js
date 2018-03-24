@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
     var formSubmitted = false;
     //Autorization block
     var $loginInForm = $('#login-in-form');
@@ -15,7 +14,7 @@ $(document).ready(function() {
         $emailInput = $signInForm.find('#recipient-email'),
         $passwordInput = $signInForm.find('#recipient-password'),
         $passwordCheckInput = $signInForm.find('#recipient-password');
-    $("form").submit(function () {
+    $("form").submit(function (event) {
         switch(this.id) {
             case "login-in-form":
                 event.preventDefault();
@@ -40,6 +39,7 @@ $(document).ready(function() {
                     userCheckPassword: $('#register-check-password').val()
                 },'json')
                     .done(function (r) {
+                        window.location.replace("/");
                         console.log('Success',r);
                     })
                     .fail(function (r) {
@@ -62,7 +62,7 @@ $(document).ready(function() {
     });
     //Autoriztion block end
     var $canvas = $("#canvas");
-    $canvas.click(function(e){
+    $canvas.click(function(event){
         var rect = canvas.getBoundingClientRect();
         var x = event.clientX - rect.left;
         var y = event.clientY - rect.top;
@@ -72,27 +72,109 @@ $(document).ready(function() {
             row: cell[1]},
             'json')
             .done(function (r) {
+                var sign = r.message.sign;
                 console.log('Success',r);
+                if (sign){
+                    drawCell(cell[0],cell[1],fildSize,sign);
+                }
+                // console.log('Success',r);
             })
             .fail(function (r) {
                 console.log('Fail',r.responseJSON.message);
-            })
-        drawCell(cell[0],cell[1],1);
+            });
+
     });
     if ($canvas.length){
-        var pointSize = 3;
-        var fildSize = 5;
+        var fildSize = 3;
         var c = document.getElementById("canvas");
         var width = c.width;
         var height = c.height;
         var cellWidth =  width/fildSize;
         var cellHeight =  height/fildSize;
         drawField(fildSize);
+        doPoll();
+        function doPoll(){
+            $.post('/api/setonline', {
+                   userId: $('#player').data('id')},
+                'json')
+                .done(function (r) {
+                    $('#opName').text(r.message.op_name);
+                    var field = r.message.field;
+                    var result = r.message.result;
+                    var alertBlock = $('#alert');
+                    if(field){
+                        updateField(field)
+                    }
+
+                    if(result){
+                        if(result != 1){
+                            victoryLine(result);
+                            alert(r.message.message);
+                            }else alert('Ничья');
+                        setTimeout(window.location.replace("/"),1000);
+
+                    } else {
+                        alertBlock.text(r.message.message);
+                    }
+                    setTimeout(doPoll,1000);
+                })
+                .fail(function (r) {
+                    console.log('Fail',r.responseJSON.message);
+                });
+            }
+    }
+    
+    function victoryLine(result) {
+        var c = document.getElementById("canvas");
+        var ctx = c.getContext("2d");
+        ctx.strokeStyle="#ff0000";
+        ctx.lineWidth=8;
+        if (result.lineType == 'h'){
+            ctx.beginPath();
+            ctx.moveTo(0,cellHeight*(result.line+1)-cellHeight/2);
+            ctx.lineTo(cellWidth*fildSize,cellHeight*(result.line+1)-cellHeight/2);
+            ctx.stroke();
+        }
+        if (result.lineType == 'v'){
+            ctx.beginPath();
+            ctx.moveTo(cellWidth*(result.line+1)-cellWidth/2,0);
+            ctx.lineTo(cellWidth*(result.line+1)-cellWidth/2,cellHeight*fildSize);
+            ctx.stroke();
+        }
+        if (result.lineType == 'd' && result.line == 1){
+            ctx.beginPath();
+            ctx.moveTo(0,0);
+            ctx.lineTo(cellWidth*fildSize,cellHeight*fildSize);
+            ctx.stroke();
+        }
+        if (result.lineType == 'd' && result.line == 2){
+            ctx.beginPath();
+            ctx.moveTo(cellWidth*fildSize,0);
+            ctx.lineTo(0,cellHeight*fildSize);
+            ctx.stroke();
+        }
+    }
+
+    function updateField(field) {
+        var c = document.getElementById("canvas");
+        var ctx = c.getContext("2d");
+        ctx.clearRect(0, 0, c.width, c.height);
+        drawField(fildSize);
+        for(var i=0;i<3;i++)
+        {
+            for(var j=0;j<3;j++){
+                if(field[i][j] != 0){
+                    drawCell(j,i,fildSize,field[i][j]);
+                }
+            }
+        }
     }
 
     function drawField(size){
         var c = document.getElementById("canvas");
         var ctx = c.getContext("2d");
+        ctx.strokeStyle="#000000";
+        ctx.lineWidth=1;
         var tempWidth =  width/size;
         var tempHeight =  height/size;
         for (var i = 0; i <= size; i++){
@@ -119,7 +201,7 @@ $(document).ready(function() {
         x1 = (col + 1) * cellWidth - 5;
         y0 = row * cellHeight + 5;
         y1 = (row + 1)* cellHeight - 5;
-        if (stroke == 0){
+        if (stroke == 2){
             drawCircle(x0,x1,y0,y1);
         }else {
             drawCross(x0,x1,y0,y1);

@@ -29,3 +29,7 @@ routing:
         pattern: /api/click
         controller: ApiController
         action: clickAction
+    setonline:
+        pattern: /api/setonline
+        controller: ApiController
+        action: onlineAction
